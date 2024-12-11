@@ -1,10 +1,7 @@
 package com.scaler.backendproject.controller;
 
 import com.scaler.backendproject.models.Product;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ProductController {
@@ -26,16 +23,22 @@ public class ProductController {
     }
 
     //This will help in "Retrieve" function
+//    @RequestMapping(value = "/product", method = RequestMethod.GET)
+    @GetMapping("/product")
     public Product getProductById(Long id) {
         return null;
     }
 
     //This will help in "Update" function
+//    @RequestMapping(value = "/product", method = RequestMethod.PUT)
+    @PutMapping("/product")
     public void updateProduct(Product product) {
 
     }
 
     //This will help in "Delete" function
+//    @RequestMapping(value = "/product", method = RequestMethod.DELETE)
+    @DeleteMapping
     public void deleteProduct(Product product) {
 
     }
