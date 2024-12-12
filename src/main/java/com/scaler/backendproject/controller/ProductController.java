@@ -15,7 +15,7 @@ public class ProductController {
     */
 
     //This will help in performing "Create" function
-//    @RequestMapping(value = "/product", method = RequestMethod.POST)
+    //@RequestMapping(value = "/product", method = RequestMethod.POST)
     //Post mapping does the same thing as request mapping of post and is a shortcut
     @PostMapping("/product")
     public void createProduct(Product product) {
@@ -23,21 +23,21 @@ public class ProductController {
     }
 
     //This will help in "Retrieve" function
-//    @RequestMapping(value = "/product", method = RequestMethod.GET)
+    //@RequestMapping(value = "/product", method = RequestMethod.GET)
     @GetMapping("/product")
     public Product getProductById(Long id) {
         return null;
     }
 
     //This will help in "Update" function
-//    @RequestMapping(value = "/product", method = RequestMethod.PUT)
+    //@RequestMapping(value = "/product", method = RequestMethod.PUT)
     @PutMapping("/product")
     public void updateProduct(Product product) {
 
     }
 
     //This will help in "Delete" function
-//    @RequestMapping(value = "/product", method = RequestMethod.DELETE)
+    //@RequestMapping(value = "/product", method = RequestMethod.DELETE)
     @DeleteMapping("/product")
     public void deleteProduct(Product product) {
 
