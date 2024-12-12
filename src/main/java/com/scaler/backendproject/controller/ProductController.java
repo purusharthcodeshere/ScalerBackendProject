@@ -27,16 +27,23 @@ public class ProductController {
     //@RequestMapping(value = "/product", method = RequestMethod.POST)
     //Post mapping does the same thing as request mapping of post and is a shortcut
     @PostMapping("/product")
-    public void createProduct(Product product) {
+    public Product createProduct(@RequestBody Product product) {
+        Product p = productService.createProduct(product.getId(),
+                product.getTitle(), product.getDescription(),
+                product.getPrice(), product.getCategory().getTitle(),
+                product.getImageUrl());
 
+        return p;
     }
 
     //This will help in "Retrieve" function
     //@RequestMapping(value = "/product", method = RequestMethod.GET)
     @GetMapping("/product/{id}")
     public Product getProductById(@PathVariable("id") Long id) {
-        productService.getSingleProduct(id);
-        return null;
+        System.out.println("Starting the API here");
+        Product p = productService.getSingleProduct(id);
+        System.out.println("Ending the API here");
+        return p;
     }
 
     //This will help in "Update" function
