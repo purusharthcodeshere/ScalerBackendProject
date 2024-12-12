@@ -1,6 +1,7 @@
 package com.scaler.backendproject.controller;
 
 import com.scaler.backendproject.models.Product;
+import com.scaler.backendproject.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,6 +15,14 @@ public class ProductController {
     * 4. Delete a product
     */
 
+    //This product controller has now the dependency on the productService
+    private ProductService productService;
+
+    //Constructor to pass service to pass in controller so we can implement it
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+
     //This will help in performing "Create" function
     //@RequestMapping(value = "/product", method = RequestMethod.POST)
     //Post mapping does the same thing as request mapping of post and is a shortcut
@@ -24,8 +33,9 @@ public class ProductController {
 
     //This will help in "Retrieve" function
     //@RequestMapping(value = "/product", method = RequestMethod.GET)
-    @GetMapping("/product")
-    public Product getProductById(Long id) {
+    @GetMapping("/product/{id}")
+    public Product getProductById(@PathVariable("id") Long id) {
+        productService.getSingleProduct(id);
         return null;
     }
 
