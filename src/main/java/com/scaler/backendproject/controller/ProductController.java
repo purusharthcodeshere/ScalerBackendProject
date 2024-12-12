@@ -38,7 +38,7 @@ public class ProductController {
 
     //This will help in "Delete" function
 //    @RequestMapping(value = "/product", method = RequestMethod.DELETE)
-    @DeleteMapping
+    @DeleteMapping("/product")
     public void deleteProduct(Product product) {
 
     }
