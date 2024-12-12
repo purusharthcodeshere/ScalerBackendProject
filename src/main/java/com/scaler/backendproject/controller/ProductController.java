@@ -1,6 +1,7 @@
 package com.scaler.backendproject.controller;
 
 import com.scaler.backendproject.models.Product;
+import com.scaler.backendproject.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,8 +15,16 @@ public class ProductController {
     * 4. Delete a product
     */
 
+    //This product controller has now the dependency on the productService
+    private ProductService productService;
+
+    //Constructor to pass service to pass in controller so we can implement it
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+
     //This will help in performing "Create" function
-//    @RequestMapping(value = "/product", method = RequestMethod.POST)
+    //@RequestMapping(value = "/product", method = RequestMethod.POST)
     //Post mapping does the same thing as request mapping of post and is a shortcut
     @PostMapping("/product")
     public void createProduct(Product product) {
@@ -23,21 +32,22 @@ public class ProductController {
     }
 
     //This will help in "Retrieve" function
-//    @RequestMapping(value = "/product", method = RequestMethod.GET)
-    @GetMapping("/product")
-    public Product getProductById(Long id) {
+    //@RequestMapping(value = "/product", method = RequestMethod.GET)
+    @GetMapping("/product/{id}")
+    public Product getProductById(@PathVariable("id") Long id) {
+        productService.getSingleProduct(id);
         return null;
     }
 
     //This will help in "Update" function
-//    @RequestMapping(value = "/product", method = RequestMethod.PUT)
+    //@RequestMapping(value = "/product", method = RequestMethod.PUT)
     @PutMapping("/product")
     public void updateProduct(Product product) {
 
     }
 
     //This will help in "Delete" function
-//    @RequestMapping(value = "/product", method = RequestMethod.DELETE)
+    //@RequestMapping(value = "/product", method = RequestMethod.DELETE)
     @DeleteMapping("/product")
     public void deleteProduct(Product product) {
 
