@@ -28,12 +28,11 @@ public class ProductController {
     //Post mapping does the same thing as request mapping of post and is a shortcut
     @PostMapping("/product")
     public Product createProduct(@RequestBody Product product) {
-        Product p = productService.createProduct(product.getId(),
+        //Local variable 'p' was redundant
+        return productService.createProduct(product.getId(),
                 product.getTitle(), product.getDescription(),
                 product.getPrice(), product.getCategory().getTitle(),
                 product.getImageUrl());
-
-        return p;
     }
 
     //This will help in "Retrieve" function
@@ -55,8 +54,11 @@ public class ProductController {
 
     //This will help in "Delete" function
     //@RequestMapping(value = "/product", method = RequestMethod.DELETE)
-    @DeleteMapping("/product")
-    public void deleteProduct(Product product) {
-
+    @DeleteMapping("/product/{id}")
+    public Product deleteProduct(@PathVariable("id") Long id) {
+        System.out.println("Starting the delete API");
+        Product p = productService.deleteProduct(id);
+        System.out.println("Ending the delete API");
+        return p;
     }
 }
