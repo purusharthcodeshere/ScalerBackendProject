@@ -2,6 +2,7 @@ package com.scaler.backendproject.service;
 
 import com.scaler.backendproject.dto.FakeStoreProductDTO;
 import com.scaler.backendproject.models.Product;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,6 +14,7 @@ public class FakeStoreProductService implements ProductService {
 
     //Inside this, fake store is going to be third party service
 
+    @Autowired
     private RestTemplate restTemplate;
 
     public FakeStoreProductService(RestTemplate restTemplate) {
@@ -53,6 +55,14 @@ public class FakeStoreProductService implements ProductService {
                 fakeStoreProductDTO, FakeStoreProductDTO.class);
 
         return response.getProduct();
+    }
+
+    @Override
+    public Product deleteProduct(long id) {
+        System.out.println("Inside the delete product in FakeStoreProductService API");
+        //No return type, as the restTemplate returns void for delete function
+        restTemplate.delete("https://fakestoreapi.com/products/" + id);
+        return getSingleProduct(id);
     }
 
 }
