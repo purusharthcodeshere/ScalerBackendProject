@@ -39,17 +39,26 @@ public class ProductController {
     //@RequestMapping(value = "/product", method = RequestMethod.GET)
     @GetMapping("/product/{id}")
     public Product getProductById(@PathVariable("id") Long id) {
-        System.out.println("Starting the API here");
+        System.out.println("Starting the getSingleProduct API here");
         Product p = productService.getSingleProduct(id);
         System.out.println("Ending the API here");
+        return p;
+    }
+
+    @GetMapping("/product")
+    public Product[] getAllProducts() {
+        System.out.println("Starting the Get all Products API here");
+        Product[] p = productService.getAllProducts();
+        System.out.println("Ending the Get All products API");
+
         return p;
     }
 
     //This will help in "Update" function
     //@RequestMapping(value = "/product", method = RequestMethod.PUT)
     @PutMapping("/product")
-    public void updateProduct(Product product) {
-
+    public Product updateProduct(Product product) {
+        return null;
     }
 
     //This will help in "Delete" function

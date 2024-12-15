@@ -82,6 +82,15 @@ public class FakeStoreProductDTO {
         return product;
     }
 
+    public Product[] getListOfProducts(FakeStoreProductDTO[] listOfProducts) {
+        Product[] list = new Product[listOfProducts.length];
+        for (int i = 0; i < listOfProducts.length; i++) {
+            list[i] = listOfProducts[i].getProduct();
+        }
+
+        return list;
+    }
+
     @Override
     public String toString() {
         return "FakeStoreProductDTO{" +
