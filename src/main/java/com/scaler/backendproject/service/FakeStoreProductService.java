@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 //This annotation here is going to tell SpringBoot that this is one of our important class so create an object of this
@@ -36,12 +39,12 @@ public class FakeStoreProductService implements ProductService {
 //        return new Product[0];
 //    }
 
-    public Product[] getAllProducts() {
+    public List<Product> getAllProducts() {
         System.out.println("In the getAllProducts API in FKSPS");
-        FakeStoreProductDTO[] listOfProducts =
+        FakeStoreProductDTO[] fakeStoreListOfProducts =
                 restTemplate.getForObject("https://fakestoreapi.com/products/",
                         FakeStoreProductDTO[].class);
-        return new FakeStoreProductDTO().getListOfProducts(listOfProducts);
+        return new FakeStoreProductDTO().getListOfProducts(fakeStoreListOfProducts);
     }
 
     @Override

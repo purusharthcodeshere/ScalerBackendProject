@@ -4,6 +4,8 @@ import com.scaler.backendproject.models.Product;
 import com.scaler.backendproject.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class ProductController {
 
@@ -46,9 +48,9 @@ public class ProductController {
     }
 
     @GetMapping("/product")
-    public Product[] getAllProducts() {
+    public List<Product> getAllProducts() {
         System.out.println("Starting the Get all Products API here");
-        Product[] p = productService.getAllProducts();
+        List<Product> p = productService.getAllProducts();
         System.out.println("Ending the Get All products API");
 
         return p;
