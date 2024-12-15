@@ -4,6 +4,9 @@ import com.scaler.backendproject.dto.FakeStoreProductDTO;
 import com.scaler.backendproject.models.Category;
 import com.scaler.backendproject.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -80,15 +83,15 @@ public class FakeStoreProductService implements ProductService {
         return deletedProduct;
     }
 
+
     public Product updateProduct(Long id, String title, String description,
                                  Double price, Category category, String imageUrl) {
         System.out.println("Inside the update product in FakeStoreProductService API");
         Product existingProduct = getSingleProduct(id);
 
-        if (existingProduct != null) {
-            FakeStoreProductDTO fakeStoreProductDTO = new FakeStoreProductDTO();
+        ResponseEntity<Product> responseEntity = null;
+        try {
             System.out.println("Updating the Product");
-            fakeStoreProductDTO.setId(id);
             if (title != null) {
                 existingProduct.setTitle(title);
             }
@@ -104,14 +107,58 @@ public class FakeStoreProductService implements ProductService {
             if (imageUrl != null) {
                 existingProduct.setImageUrl(imageUrl);
             }
-            Product response =
-                    restTemplate.patchForObject("https://fakestoreapi.com/products/" + id,
-                            existingProduct, Product.class);
-            return response;
-        } else {
-            throw new RuntimeException("Product Not Found");
+
+            // Create HttpEntity with the updated product
+            HttpEntity<Product> requestEntity = new HttpEntity<>(existingProduct);
+
+            // Use exchange() method instead of patchForObject
+            responseEntity = restTemplate.exchange(
+                    "https://fakestoreapi.com/products/" + id,
+                    HttpMethod.PUT,
+                    requestEntity,
+                    Product.class
+            );
+        } catch (RuntimeException re) {
+            throw new RuntimeException("Product Not Found" + re);
         }
-//        return null;
+
+        return responseEntity.getBody(); //responseEntity != null ? responseEntity.getBody() : null;
     }
+
+
+
+//    public Product updateProduct(Long id, String title, String description,
+//                                 Double price, Category category, String imageUrl) {
+//        System.out.println("Inside the update product in FakeStoreProductService API");
+//        Product existingProduct = getSingleProduct(id);
+//
+//        if (existingProduct != null) {
+//            FakeStoreProductDTO fakeStoreProductDTO = new FakeStoreProductDTO();
+//            System.out.println("Updating the Product");
+//            fakeStoreProductDTO.setId(id);
+//            if (title != null) {
+//                existingProduct.setTitle(title);
+//            }
+//            if (description != null) {
+//                existingProduct.setDescription(description);
+//            }
+//            if (price != null) {
+//                existingProduct.setPrice(price);
+//            }
+//            if (category != null) {
+//                existingProduct.setCategory(category);
+//            }
+//            if (imageUrl != null) {
+//                existingProduct.setImageUrl(imageUrl);
+//            }
+//            Product response =
+//                    restTemplate.patchForObject("https://fakestoreapi.com/products/" + id,
+//                            existingProduct, Product.class);
+//            return response;
+//        } else {
+//            throw new RuntimeException("Product Not Found");
+//        }
+//       return null;
+//    }
 
 }
