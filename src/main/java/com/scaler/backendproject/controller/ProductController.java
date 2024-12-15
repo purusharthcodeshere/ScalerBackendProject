@@ -4,6 +4,8 @@ import com.scaler.backendproject.models.Product;
 import com.scaler.backendproject.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class ProductController {
 
@@ -46,9 +48,9 @@ public class ProductController {
     }
 
     @GetMapping("/product")
-    public Product[] getAllProducts() {
+    public List<Product> getAllProducts() {
         System.out.println("Starting the Get all Products API here");
-        Product[] p = productService.getAllProducts();
+        List<Product> p = productService.getAllProducts();
         System.out.println("Ending the Get All products API");
 
         return p;
@@ -56,9 +58,13 @@ public class ProductController {
 
     //This will help in "Update" function
     //@RequestMapping(value = "/product", method = RequestMethod.PUT)
-    @PutMapping("/product")
-    public Product updateProduct(Product product) {
-        return null;
+    @PutMapping("/product/{id}")
+    public Product updateProduct(@PathVariable("id") Long id, @RequestBody Product product) {
+        Product updatedProduct = productService.updateProduct(id,
+                product.getTitle(), product.getDescription(),
+                product.getPrice(), product.getCategory(),
+                product.getImageUrl());
+        return updatedProduct;
     }
 
     //This will help in "Delete" function
@@ -66,8 +72,8 @@ public class ProductController {
     @DeleteMapping("/product/{id}")
     public Product deleteProduct(@PathVariable("id") Long id) {
         System.out.println("Starting the delete API");
-        Product p = productService.deleteProduct(id);
+        Product product = productService.deleteProduct(id);
         System.out.println("Ending the delete API");
-        return p;
+        return product;
     }
 }

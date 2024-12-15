@@ -5,6 +5,9 @@ import com.scaler.backendproject.models.Product;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //@Getter
 //@Setter
 public class FakeStoreProductDTO {
@@ -82,13 +85,13 @@ public class FakeStoreProductDTO {
         return product;
     }
 
-    public Product[] getListOfProducts(FakeStoreProductDTO[] listOfProducts) {
-        Product[] list = new Product[listOfProducts.length];
-        for (int i = 0; i < listOfProducts.length; i++) {
-            list[i] = listOfProducts[i].getProduct();
+    public List<Product> getListOfProducts(FakeStoreProductDTO[] fakeStoreListOfProducts) {
+        List<Product> listOfProducts = new ArrayList<>();
+        for (FakeStoreProductDTO fakeStoreListOfProduct : fakeStoreListOfProducts) {
+            listOfProducts.add(fakeStoreListOfProduct.getProduct());
         }
 
-        return list;
+        return listOfProducts;
     }
 
     @Override
