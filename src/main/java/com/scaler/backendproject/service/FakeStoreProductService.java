@@ -31,9 +31,17 @@ public class FakeStoreProductService implements ProductService {
         return fakeStoreProductDTO.getProduct();
     }
 
+//    @Override
+//    public Product[] getAllProducts(FakeStoreProductDTO[] listOfProducts) {
+//        return new Product[0];
+//    }
 
-    public List<Product> getAllProducts() {
-        return List.of();
+    public Product[] getAllProducts() {
+        System.out.println("In the getAllProducts API in FKSPS");
+        FakeStoreProductDTO[] listOfProducts =
+                restTemplate.getForObject("https://fakestoreapi.com/products/",
+                        FakeStoreProductDTO[].class);
+        return new FakeStoreProductDTO().getListOfProducts(listOfProducts);
     }
 
     @Override
@@ -63,6 +71,16 @@ public class FakeStoreProductService implements ProductService {
         //No return type, as the restTemplate returns void for delete function
         restTemplate.delete("https://fakestoreapi.com/products/" + id);
         return getSingleProduct(id);
+    }
+
+    public Product updateProduct(long id, String title, String description, Double price, String category, String imageUrl) {
+
+        FakeStoreProductDTO fakeStoreProductDTO = new FakeStoreProductDTO();
+        fakeStoreProductDTO.setTitle(title);
+        fakeStoreProductDTO.setDescription(description);
+        fakeStoreProductDTO.setPrice(price);
+        fakeStoreProductDTO.setCategory(category);
+        return null;
     }
 
 }
