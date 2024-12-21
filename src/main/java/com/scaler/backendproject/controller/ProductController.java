@@ -1,5 +1,7 @@
 package com.scaler.backendproject.controller;
 
+import com.scaler.backendproject.dto.ErrorDTO;
+import com.scaler.backendproject.exceptions.ProductNotFoundException;
 import com.scaler.backendproject.models.Product;
 import com.scaler.backendproject.service.ProductService;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +42,7 @@ public class ProductController {
     //This will help in "Retrieve" function
     //@RequestMapping(value = "/product", method = RequestMethod.GET)
     @GetMapping("/product/{id}")
-    public Product getProductById(@PathVariable("id") Long id) {
+    public Product getProductById(@PathVariable("id") Long id) throws ProductNotFoundException {
         System.out.println("Starting the getSingleProduct API here");
         Product p = productService.getSingleProduct(id);
         System.out.println("Ending the API here");
@@ -59,7 +61,7 @@ public class ProductController {
     //This will help in "Update" function
     //@RequestMapping(value = "/product", method = RequestMethod.PUT)
     @PutMapping("/product/{id}")
-    public Product updateProduct(@PathVariable("id") Long id, @RequestBody Product product) {
+    public Product updateProduct(@PathVariable("id") Long id, @RequestBody Product product) throws ProductNotFoundException {
         Product updatedProduct = productService.updateProduct(id,
                 product.getTitle(), product.getDescription(),
                 product.getPrice(), product.getCategory(),
@@ -70,10 +72,20 @@ public class ProductController {
     //This will help in "Delete" function
     //@RequestMapping(value = "/product", method = RequestMethod.DELETE)
     @DeleteMapping("/product/{id}")
-    public Product deleteProduct(@PathVariable("id") Long id) {
+    public Product deleteProduct(@PathVariable("id") Long id) throws ProductNotFoundException {
         System.out.println("Starting the delete API");
         Product product = productService.deleteProduct(id);
         System.out.println("Ending the delete API");
         return product;
+    }
+
+    //This method will be invoked whenever there will be a
+    //ProductNotFoundException in the call trace
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ErrorDTO handleProductNotFoundException(Exception e) {
+        ErrorDTO errorDTO = new ErrorDTO();
+        errorDTO.setMessage(e.getMessage());
+
+        return errorDTO;
     }
 }

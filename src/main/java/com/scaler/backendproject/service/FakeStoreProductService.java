@@ -1,6 +1,7 @@
 package com.scaler.backendproject.service;
 
 import com.scaler.backendproject.dto.FakeStoreProductDTO;
+import com.scaler.backendproject.exceptions.ProductNotFoundException;
 import com.scaler.backendproject.models.Category;
 import com.scaler.backendproject.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +29,17 @@ public class FakeStoreProductService implements ProductService {
         this.restTemplate = restTemplate;
     }
 
-    public Product getSingleProduct(Long id) {
+    public Product getSingleProduct(Long id) throws ProductNotFoundException {
         System.out.println("We are inside the single product in FakeStoreProductService");
         FakeStoreProductDTO fakeStoreProductDTO =
                 restTemplate.getForObject("https://fakestoreapi.com/products/" + id,
                 FakeStoreProductDTO.class);
 
 //        System.out.println(fakeStoreProductDTO.toString());
+        if (fakeStoreProductDTO == null) {
+            throw new ProductNotFoundException("Product Not Found with id: " + id);
+        }
+
         return fakeStoreProductDTO.getProduct();
     }
 
@@ -73,7 +78,7 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public Product deleteProduct(Long id) {
+    public Product deleteProduct(Long id) throws ProductNotFoundException {
         System.out.println("Inside the delete product in FakeStoreProductService API");
         //No return type, as the restTemplate returns void for delete function
         //So, we first store the product in a temp variable
@@ -85,7 +90,7 @@ public class FakeStoreProductService implements ProductService {
 
 
     public Product updateProduct(Long id, String title, String description,
-                                 Double price, Category category, String imageUrl) {
+                                 Double price, Category category, String imageUrl) throws ProductNotFoundException {
         System.out.println("Inside the update product in FakeStoreProductService API");
         Product existingProduct = getSingleProduct(id);
 
