@@ -4,6 +4,8 @@ import com.scaler.backendproject.dto.ErrorDTO;
 import com.scaler.backendproject.exceptions.ProductNotFoundException;
 import com.scaler.backendproject.models.Product;
 import com.scaler.backendproject.service.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,61 +33,98 @@ public class ProductController {
     //@RequestMapping(value = "/product", method = RequestMethod.POST)
     //Post mapping does the same thing as request mapping of post and is a shortcut
     @PostMapping("/product")
-    public Product createProduct(@RequestBody Product product) {
-        //Local variable 'p' was redundant
-        return productService.createProduct(product.getId(),
+    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+        //Creating new object of Product to pass the object in response entity
+        Product newCreatedProduct = productService.createProduct(product.getId(),
                 product.getTitle(), product.getDescription(),
                 product.getPrice(), product.getCategory().getTitle(),
                 product.getImageUrl());
+
+        //Local variable 'productResponseEntity' is redundant
+        return new ResponseEntity<>(
+                newCreatedProduct,
+                HttpStatus.CREATED
+        );
     }
 
     //This will help in "Retrieve" function
     //@RequestMapping(value = "/product", method = RequestMethod.GET)
     @GetMapping("/product/{id}")
-    public Product getProductById(@PathVariable("id") Long id) throws ProductNotFoundException {
+    public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) throws ProductNotFoundException {
         System.out.println("Starting the getSingleProduct API here");
         Product p = productService.getSingleProduct(id);
         System.out.println("Ending the API here");
-        return p;
+
+        //First argument is the data we want to pass
+        //Next is the HttpStatus Class code
+        //Local variable 'productResponseEntity' is redundant
+
+        return new ResponseEntity<>(
+                p,              //First argument is the data we want to pass
+                HttpStatus.OK   //Next is the HttpStatus Class code
+        );
     }
 
-    @GetMapping("/product")
-    public List<Product> getAllProducts() {
+    @GetMapping("/products")
+    public ResponseEntity<List<Product>> getAllProducts() {
         System.out.println("Starting the Get all Products API here");
-        List<Product> p = productService.getAllProducts();
+        List<Product> productList = productService.getAllProducts();
         System.out.println("Ending the Get All products API");
 
-        return p;
+        //Local variable 'productResponseEntity' is redundant
+        //Added response entity for all products as well
+        return new ResponseEntity<>(
+                productList,
+                HttpStatus.OK
+        );
     }
 
     //This will help in "Update" function
     //@RequestMapping(value = "/product", method = RequestMethod.PUT)
     @PutMapping("/product/{id}")
-    public Product updateProduct(@PathVariable("id") Long id, @RequestBody Product product) throws ProductNotFoundException {
+    public ResponseEntity<Product> updateProduct(@PathVariable("id") Long id, @RequestBody Product product) throws ProductNotFoundException {
         Product updatedProduct = productService.updateProduct(id,
                 product.getTitle(), product.getDescription(),
                 product.getPrice(), product.getCategory(),
                 product.getImageUrl());
-        return updatedProduct;
+
+        //Local variable 'updatedProductResponseEntity' was redundant
+        return new ResponseEntity<>(
+                updatedProduct,
+                HttpStatus.OK
+        );
     }
 
     //This will help in "Delete" function
     //@RequestMapping(value = "/product", method = RequestMethod.DELETE)
     @DeleteMapping("/product/{id}")
-    public Product deleteProduct(@PathVariable("id") Long id) throws ProductNotFoundException {
+    public ResponseEntity<Product> deleteProduct(@PathVariable("id") Long id) throws ProductNotFoundException {
         System.out.println("Starting the delete API");
-        Product product = productService.deleteProduct(id);
+        Product deletedProduct = productService.deleteProduct(id);
         System.out.println("Ending the delete API");
-        return product;
+
+        //Local variable 'deleteResponseEntity' is redundant
+
+        return new ResponseEntity<>(
+                deletedProduct,
+                HttpStatus.ACCEPTED
+                //The HTTP status code 202 "Accepted"
+                //indicates that a request has been accepted for processing,
+                //but the processing has not been completed
+        );
     }
 
     //This method will be invoked whenever there will be a
     //ProductNotFoundException in the call trace
     @ExceptionHandler(ProductNotFoundException.class)
-    public ErrorDTO handleProductNotFoundException(Exception e) {
+    public ResponseEntity<ErrorDTO> handleProductNotFoundException(Exception e) {
         ErrorDTO errorDTO = new ErrorDTO();
         errorDTO.setMessage(e.getMessage());
 
-        return errorDTO;
+        //Local variable 'errorResponseEntity' is redundant
+        return new ResponseEntity<>(
+                errorDTO,
+                HttpStatus.NOT_FOUND
+        );
     }
 }
