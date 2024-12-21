@@ -5,6 +5,9 @@ import com.scaler.backendproject.models.Product;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //@Getter
 //@Setter
 public class FakeStoreProductDTO {
@@ -80,6 +83,15 @@ public class FakeStoreProductDTO {
         product.setCategory(cat);
 
         return product;
+    }
+
+    public List<Product> getListOfProducts(FakeStoreProductDTO[] fakeStoreListOfProducts) {
+        List<Product> listOfProducts = new ArrayList<>();
+        for (FakeStoreProductDTO fakeStoreListOfProduct : fakeStoreListOfProducts) {
+            listOfProducts.add(fakeStoreListOfProduct.getProduct());
+        }
+
+        return listOfProducts;
     }
 
     @Override

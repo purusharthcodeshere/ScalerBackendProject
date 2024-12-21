@@ -4,6 +4,8 @@ import com.scaler.backendproject.models.Product;
 import com.scaler.backendproject.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class ProductController {
 
@@ -28,35 +30,50 @@ public class ProductController {
     //Post mapping does the same thing as request mapping of post and is a shortcut
     @PostMapping("/product")
     public Product createProduct(@RequestBody Product product) {
-        Product p = productService.createProduct(product.getId(),
+        //Local variable 'p' was redundant
+        return productService.createProduct(product.getId(),
                 product.getTitle(), product.getDescription(),
                 product.getPrice(), product.getCategory().getTitle(),
                 product.getImageUrl());
-
-        return p;
     }
 
     //This will help in "Retrieve" function
     //@RequestMapping(value = "/product", method = RequestMethod.GET)
     @GetMapping("/product/{id}")
     public Product getProductById(@PathVariable("id") Long id) {
-        System.out.println("Starting the API here");
+        System.out.println("Starting the getSingleProduct API here");
         Product p = productService.getSingleProduct(id);
         System.out.println("Ending the API here");
         return p;
     }
 
+    @GetMapping("/product")
+    public List<Product> getAllProducts() {
+        System.out.println("Starting the Get all Products API here");
+        List<Product> p = productService.getAllProducts();
+        System.out.println("Ending the Get All products API");
+
+        return p;
+    }
+
     //This will help in "Update" function
     //@RequestMapping(value = "/product", method = RequestMethod.PUT)
-    @PutMapping("/product")
-    public void updateProduct(Product product) {
-
+    @PutMapping("/product/{id}")
+    public Product updateProduct(@PathVariable("id") Long id, @RequestBody Product product) {
+        Product updatedProduct = productService.updateProduct(id,
+                product.getTitle(), product.getDescription(),
+                product.getPrice(), product.getCategory(),
+                product.getImageUrl());
+        return updatedProduct;
     }
 
     //This will help in "Delete" function
     //@RequestMapping(value = "/product", method = RequestMethod.DELETE)
-    @DeleteMapping("/product")
-    public void deleteProduct(Product product) {
-
+    @DeleteMapping("/product/{id}")
+    public Product deleteProduct(@PathVariable("id") Long id) {
+        System.out.println("Starting the delete API");
+        Product product = productService.deleteProduct(id);
+        System.out.println("Ending the delete API");
+        return product;
     }
 }
