@@ -12,6 +12,7 @@ public class BackendProjectApplication {
 
         Product product = new Product();
         product.setId(12L);
+        System.out.println(product.getId());
         System.out.println(product.toString());
     }
 }
