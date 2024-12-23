@@ -14,5 +14,4 @@ public class BackendProjectApplication {
         product.setId(12L);
         System.out.println(product.toString());
     }
-
 }
