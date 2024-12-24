@@ -16,8 +16,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-//This annotation here is going to tell SpringBoot that this is one of our important class so create an object of this
-@Service
+//This annotation here is going to tell SpringBoot
+//that this is one of our important class
+//so create an object of this
+@Service("fakeStoreProductService")
 public class FakeStoreProductService implements ProductService {
 
     //Inside this, fake store is going to be third party service

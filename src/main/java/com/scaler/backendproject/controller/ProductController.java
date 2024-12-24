@@ -4,6 +4,7 @@ import com.scaler.backendproject.dto.ErrorDTO;
 import com.scaler.backendproject.exceptions.ProductNotFoundException;
 import com.scaler.backendproject.models.Product;
 import com.scaler.backendproject.service.ProductService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,9 @@ public class ProductController {
     private ProductService productService;
 
     //Constructor to pass service to pass in controller so we can implement it
-    public ProductController(ProductService productService) {
+    //Added Qualifier Annotation to differentiate between which class we want to choose
+    //FakeStoreProductService or selfProductService
+    public ProductController(@Qualifier("selfProductService") ProductService productService) {
         this.productService = productService;
     }
 
