@@ -56,7 +56,6 @@ class BackendProjectApplicationTests {
 
         List<Product> currentProducts = category.getProducts();
         System.out.println(currentProducts.size());
-
         System.out.println("We have the list of the products");
     }
 }
