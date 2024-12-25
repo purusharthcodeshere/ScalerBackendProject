@@ -1,6 +1,8 @@
 package com.scaler.backendproject;
 
+import com.scaler.backendproject.models.Category;
 import com.scaler.backendproject.models.Product;
+import com.scaler.backendproject.repository.CategoryRepository;
 import com.scaler.backendproject.repository.ProductRepository;
 import com.scaler.backendproject.repository.projections.ProductProjection;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,9 @@ class BackendProjectApplicationTests {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Test
     void contextLoads() {
@@ -43,4 +48,15 @@ class BackendProjectApplicationTests {
         System.out.println(productProjectionList.get(0).getTitle());
     }
 
+    @Test
+    void fetchTypeTest() {
+        Category category = categoryRepository.findById(1L).get();
+        System.out.println(category.getId());
+        System.out.println("We are done here");
+
+        List<Product> currentProducts = category.getProducts();
+        System.out.println(currentProducts.size());
+
+        System.out.println("We have the list of the products");
+    }
 }
