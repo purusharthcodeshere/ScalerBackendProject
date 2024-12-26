@@ -34,7 +34,7 @@ public class FakeStoreCategoryService implements CategoryService {
 
     public List<Category> getAllCategories() throws NullPointerException {
         FakeStoreCategoryDTO[] fakeStoreListOfCategories =
-                restTemplate.getForObject("https://fakestoreapi.com/products/categories/",
+                restTemplate.getForObject("https://fakestoreapi.com/products/categories",
                         FakeStoreCategoryDTO[].class);
 
         if (fakeStoreListOfCategories == null) {
