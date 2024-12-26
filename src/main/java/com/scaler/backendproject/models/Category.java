@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Category extends BaseModel{
+public class Category extends BaseModel {
     private String title;
 
     //We declare the cardinality between the Product and the Category Class
