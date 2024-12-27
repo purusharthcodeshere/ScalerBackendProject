@@ -1,12 +1,13 @@
 package com.scaler.backendproject.service;
 
-import com.scaler.backendproject.dto.FakeStoreCategoryDTO;
+import com.scaler.backendproject.dto.FakeStoreProductDTO;
 import com.scaler.backendproject.exceptions.CategoryNotFoundException;
 import com.scaler.backendproject.models.Category;
 import com.scaler.backendproject.models.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service("fakeStoreCategoryService")
@@ -29,17 +30,48 @@ public class FakeStoreCategoryService implements CategoryService {
     }
 
     public List<Product> getProductsInCategory(String category) throws CategoryNotFoundException {
-        return List.of();
+
+        FakeStoreProductDTO[] fakeStoreListOfProducts = null;
+        try {
+            //Fetch products for the given category from the API
+            fakeStoreListOfProducts =
+                    restTemplate.getForObject(
+                            "https://fakestoreapi.com/products/category/" + category,
+                            FakeStoreProductDTO[].class
+                    );
+            if (fakeStoreListOfProducts == null || fakeStoreListOfProducts.length == 0) {
+                throw new CategoryNotFoundException("No products found for category " + category);
+            }
+        } catch (Exception e) {
+            throw new CategoryNotFoundException("Error fetching products for category " + category, e);
+        }
+
+        return new FakeStoreProductDTO().getListOfProducts(fakeStoreListOfProducts);
     }
 
     public List<Category> getAllCategories() throws NullPointerException {
-        FakeStoreCategoryDTO[] fakeStoreListOfCategories =
+        String[] fakeStoreListOfCategories =
                 restTemplate.getForObject("https://fakestoreapi.com/products/categories",
-                        FakeStoreCategoryDTO[].class);
+                        String[].class);
 
         if (fakeStoreListOfCategories == null) {
             throw new NullPointerException("No Categories found");
         }
-        return new FakeStoreCategoryDTO().getListOfCategories(fakeStoreListOfCategories);
+
+        //Change the Response Type:
+        //Modified the RestTemplate.getForObject call to expect String[].class
+        //instead of FakeStoreCategoryDTO[].class, which matches the API response.
+        //Then we can convert the string array (["electronics", "jewelery", ...])
+        //into a list of Category objects using Java Streams.
+
+        //return new FakeStoreCategoryDTO().getListOfCategories(fakeStoreListOfCategories);
+        // Convert the array of strings to a list of Category objects
+        return Arrays.stream(fakeStoreListOfCategories)
+                .map(categoryTitle -> {
+                    Category category = new Category();
+                    category.setTitle(categoryTitle);
+                    return category;
+                })
+                .toList();
     }
 }

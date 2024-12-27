@@ -6,10 +6,7 @@ import com.scaler.backendproject.models.Product;
 import com.scaler.backendproject.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,10 +39,9 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
     }
 
-    @GetMapping("/productsInCategory")
-    public ResponseEntity<List<Product>> getProductsByCategory(@RequestBody Category category) throws CategoryNotFoundException {
-        String categoryTitle = category.getTitle();
-        List<Product> productsInCategory = categoryService.getProductsInCategory(categoryTitle);
+    @GetMapping("/productsInCategory/{category}")
+    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable("category") String category) throws CategoryNotFoundException {
+        List<Product> productsInCategory = categoryService.getProductsInCategory(category);
         return new ResponseEntity<>(productsInCategory, HttpStatus.OK);
     }
 }
