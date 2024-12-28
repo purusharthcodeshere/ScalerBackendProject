@@ -11,9 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 //This annotation here is going to tell SpringBoot
@@ -50,11 +47,14 @@ public class FakeStoreProductService implements ProductService {
 //        return new Product[0];
 //    }
 
-    public List<Product> getAllProducts() {
+    public List<Product> getAllProducts() throws ProductNotFoundException {
         System.out.println("In the getAllProducts API in FKSPS");
         FakeStoreProductDTO[] fakeStoreListOfProducts =
                 restTemplate.getForObject("https://fakestoreapi.com/products/",
                         FakeStoreProductDTO[].class);
+        if (fakeStoreListOfProducts == null) {
+            throw new ProductNotFoundException("No Products Found in the Database");
+        }
         return new FakeStoreProductDTO().getListOfProducts(fakeStoreListOfProducts);
     }
 
