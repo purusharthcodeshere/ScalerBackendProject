@@ -23,7 +23,7 @@ public class ProductController {
     */
 
     //This product controller has now the dependency on the productService
-    private ProductService productService;
+    private final ProductService productService;
 
     //Constructor to pass service to pass in controller so we can implement it
     //Added Qualifier Annotation to differentiate between which class we want to choose
@@ -71,7 +71,12 @@ public class ProductController {
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getAllProducts() {
         System.out.println("Starting the Get all Products API here");
-        List<Product> productList = productService.getAllProducts();
+        List<Product> productList = null;
+        try {
+            productList = productService.getAllProducts();
+        } catch (ProductNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         System.out.println("Ending the Get All products API");
 
         //Local variable 'productResponseEntity' is redundant
