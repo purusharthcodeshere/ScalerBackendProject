@@ -16,27 +16,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     //This will insert product records in my product table
     Product save(Product product);
 
-
-    //  SELECT *
-    //  FROM
-    //      Product
-    //  WHERE
-    //      description = xyz (passed argument)
+    //SELECT * FROM Product WHERE description = xyz (passed argument)
     Product findByDescription(String description);
 
-    //  SELECT *
-    //  FROM
-    //      Product
-    //  WHERE
-    //      title = xyz (passed argument)
+    //SELECT * FROM Product WHERE title = xyz (passed argument)
     Product findByTitle(String title);
 
-    //  SELECT *
-    //  FROM
-    //      Product
-    //  WHERE
-    //      description = xyz AND
-    //      title = abc             (passed arguments)
+    //SELECT * FROM Product WHERE description = xyz AND title = abc (passed arguments)
     Product findByTitleAndDescription(String title, String description);
 
     //Implement HQL Query
