@@ -83,6 +83,37 @@ public class SelfProductService implements ProductService {
 
     @Override
     public Product updateProduct(Long id, String title, String description, Double price, Category category, String imageUrl) throws ProductNotFoundException {
-        return null;
+        // Fetch the product by ID
+        Product existingProduct = getSingleProduct(id);
+
+        // Update fields if the new values are not null (allowing partial updates)
+        if (title != null && !title.isEmpty()) {
+            existingProduct.setTitle(title);
+        }
+        if (description != null && !description.isEmpty()) {
+            existingProduct.setDescription(description);
+        }
+        if (price != null) {
+            existingProduct.setPrice(price);
+        }
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            existingProduct.setImageUrl(imageUrl);
+        }
+
+        // Update the category if provided
+        if (category != null) {
+            // Check if the category already exists in the database
+            Optional<Category> existingCategory = categoryRepository.findByTitle(category.getTitle());
+            if (existingCategory.isEmpty()) {
+                // Save the new category
+                Category newCategory = categoryRepository.save(category);
+                existingProduct.setCategory(newCategory);
+            } else {
+                existingProduct.setCategory(existingCategory.get());
+            }
+        }
+
+        // Save and return the updated product
+        return productRepository.save(existingProduct);
     }
 }
