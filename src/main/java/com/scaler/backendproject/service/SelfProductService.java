@@ -33,8 +33,12 @@ public class SelfProductService implements ProductService {
     }
 
     @Override
-    public List<Product> getAllProducts() {
-        return List.of();
+    public List<Product> getAllProducts() throws ProductNotFoundException {
+        Optional<List<Product>> listOfProducts = Optional.of(productRepository.findAll());
+        if (listOfProducts.isEmpty()) {
+            throw new ProductNotFoundException("No Products in the database");
+        }
+        return listOfProducts.get();
     }
 
     @Override
@@ -67,7 +71,14 @@ public class SelfProductService implements ProductService {
 
     @Override
     public Product deleteProduct(Long id) throws ProductNotFoundException {
-        return null;
+        Product deletedProduct = getSingleProduct(id);
+        try {
+            deletedProduct.setDeleted(true);
+            productRepository.delete(deletedProduct);
+        } catch (Exception e) {
+            throw new ProductNotFoundException("Product not found in our database");
+        }
+        return deletedProduct;
     }
 
     @Override
