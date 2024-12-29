@@ -86,6 +86,7 @@ public class FakeStoreProductService implements ProductService {
         //So, we first store the product in a temp variable
         //To show which product we are deleting
         Product deletedProduct = getSingleProduct(id);
+        deletedProduct.setDeleted(true);
         restTemplate.delete("https://fakestoreapi.com/products/" + id);
         return deletedProduct;
     }
@@ -131,8 +132,6 @@ public class FakeStoreProductService implements ProductService {
 
         return responseEntity.getBody(); //responseEntity != null ? responseEntity.getBody() : null;
     }
-
-
 
 //    public Product updateProduct(Long id, String title, String description,
 //                                 Double price, Category category, String imageUrl) {
