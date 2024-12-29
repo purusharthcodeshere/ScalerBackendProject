@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service("fakeStoreCategoryService")
 public class FakeStoreCategoryService implements CategoryService {
@@ -19,7 +20,7 @@ public class FakeStoreCategoryService implements CategoryService {
         this.restTemplate = restTemplate;
     }
 
-    public Category createCategory(Long id, String categoryTitle) {
+    public Category createCategory(String categoryTitle) {
         //In FakeStore there is no API hit for createCategory
 //        FakeStoreCategoryDTO fakeStoreCategoryDTO = new FakeStoreCategoryDTO();
 //        fakeStoreCategoryDTO.setId(id);
@@ -29,7 +30,7 @@ public class FakeStoreCategoryService implements CategoryService {
         return null;
     }
 
-    public List<Product> getProductsInCategory(String category) throws CategoryNotFoundException {
+    public List<Product> getProductsInCategory(String category) throws NoSuchElementException {
 
         FakeStoreProductDTO[] fakeStoreListOfProducts = null;
         try {
@@ -43,7 +44,7 @@ public class FakeStoreCategoryService implements CategoryService {
                 throw new CategoryNotFoundException("No products found for category " + category);
             }
         } catch (Exception e) {
-            throw new CategoryNotFoundException("Error fetching products for category " + category, e);
+            throw new NoSuchElementException("Error fetching products for category " + category, e);
         }
 
         return new FakeStoreProductDTO().getListOfProducts(fakeStoreListOfProducts);
