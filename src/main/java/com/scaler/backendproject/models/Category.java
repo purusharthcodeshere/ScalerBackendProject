@@ -1,20 +1,19 @@
 package com.scaler.backendproject.models;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.EntityListeners;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Category extends BaseModel {
     private String title;
 
@@ -24,8 +23,8 @@ public class Category extends BaseModel {
     //Since in the Product class, this cardinality is mapped by the category attribute,
     //we mention that here to indicate Hibernate not to create another mapping
     //We also mention the fetch type b/w Eager and Lazy
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private List<Product> products;
+//    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+//    private List<Product> products;
 
     public String getTitle() {
         return title;
@@ -35,19 +34,18 @@ public class Category extends BaseModel {
         this.title = title;
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
+//    public List<Product> getProducts() {
+//        return products;
+//    }
+//
+//    public void setProducts(List<Product> products) {
+//        this.products = products;
+//    }
 
     @Override
     public String toString() {
         return "Category{" +
                 "title='" + title + '\'' +
-                ", products=" + products +
                 '}';
     }
 }
