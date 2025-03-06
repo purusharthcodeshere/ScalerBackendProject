@@ -7,7 +7,7 @@ import com.scaler.backendproject.models.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -67,12 +67,23 @@ public class FakeStoreCategoryService implements CategoryService {
 
         //return new FakeStoreCategoryDTO().getListOfCategories(fakeStoreListOfCategories);
         // Convert the array of strings to a list of Category objects
-        return Arrays.stream(fakeStoreListOfCategories)
-                .map(categoryTitle -> {
-                    Category category = new Category();
-                    category.setTitle(categoryTitle);
-                    return category;
-                })
-                .toList();
+
+        List<Category> listOfCategories = new ArrayList<>();
+
+        for (String categoryTitle : fakeStoreListOfCategories) {
+            Category category = new Category();
+            category.setTitle(categoryTitle);
+            listOfCategories.add(category);
+        }
+
+        return listOfCategories;
+//
+//        return Arrays.stream(fakeStoreListOfCategories)
+//                .map(categoryTitle -> {
+//                    Category category = new Category();
+//                    category.setTitle(categoryTitle);
+//                    return category;
+//                })
+//                .toList();
     }
 }
