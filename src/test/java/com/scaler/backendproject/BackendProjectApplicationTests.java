@@ -46,7 +46,6 @@ class BackendProjectApplicationTests {
         List<ProductProjection> productProjectionList = productRepository.getProductByCategoryIdUsingProjections(1L);
         System.out.println(productProjectionList.get(0).getTitle());
     }
-
 //    @Test
 //    void fetchTypeTest() {
 //        Category category = categoryRepository.findById(1L).get();
