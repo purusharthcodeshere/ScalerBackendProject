@@ -5,16 +5,18 @@ import com.scaler.backendproject.models.Category;
 import com.scaler.backendproject.models.Product;
 import com.scaler.backendproject.repository.CategoryRepository;
 import com.scaler.backendproject.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service("selfProductService")
 public class SelfProductService implements ProductService {
 
-    private ProductRepository productRepository;
-    private CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
     public SelfProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
@@ -32,13 +34,32 @@ public class SelfProductService implements ProductService {
         throw new ProductNotFoundException("Product not found in our database");
     }
 
+//    @Override
+//    public List<Product> getAllProducts() throws ProductNotFoundException {
+//        Optional<List<Product>> listOfProducts = Optional.of(productRepository.findAll());
+//        if (listOfProducts.isEmpty()) {
+//            throw new ProductNotFoundException("No Products in the database");
+//        }
+//        return listOfProducts.get();
+//    }
+
+    //Changed the signature to include pagination and searching
+    //Thus had to change all the method signatures as well
     @Override
-    public List<Product> getAllProducts() throws ProductNotFoundException {
-        Optional<List<Product>> listOfProducts = Optional.of(productRepository.findAll());
-        if (listOfProducts.isEmpty()) {
-            throw new ProductNotFoundException("No Products in the database");
+    public Page<Product> getAllProducts(int pageNumber, int pageSize, String fieldName) throws ProductNotFoundException {
+        Page<Product> listOfProducts = productRepository.findAll(
+                PageRequest.of(
+                        pageNumber,
+                        pageSize,
+                        Sort.by(fieldName).ascending()
+                )
+        );
+
+        if (!listOfProducts.hasContent()) {
+            throw new ProductNotFoundException("Products not found in our database");
         }
-        return listOfProducts.get();
+
+        return listOfProducts;
     }
 
     @Override
@@ -55,6 +76,7 @@ public class SelfProductService implements ProductService {
         //We use Optional Class because if the category is not present
         //Then it will return null instead of throwing an error
         Optional<Category> currentCategory = categoryRepository.findByTitle(categoryTitle);
+
         if (currentCategory.isEmpty()) {
             //This means category is not present in our database
             Category newCategory = new Category();

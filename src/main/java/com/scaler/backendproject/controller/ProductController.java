@@ -5,11 +5,10 @@ import com.scaler.backendproject.exceptions.ProductNotFoundException;
 import com.scaler.backendproject.models.Product;
 import com.scaler.backendproject.service.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 public class ProductController {
@@ -68,19 +67,41 @@ public class ProductController {
         );
     }
 
+//    @GetMapping("/products")
+//    public ResponseEntity<List<Product>> getAllProducts() {
+//        System.out.println("Starting the Get all Products API here");
+//        List<Product> productList = null;
+//        try {
+//            productList = productService.getAllProducts();
+//        } catch (ProductNotFoundException e) {
+//            throw new RuntimeException(e);
+//        }
+//        System.out.println("Ending the Get All products API");
+//
+//        //Local variable 'productResponseEntity' is redundant
+//        //Added response entity for all products as well
+//        return new ResponseEntity<>(
+//                productList,
+//                HttpStatus.OK
+//        );
+//    }
+//
+
+    //Added getAllProducts Using pagination and sorting
+    //That's why commented the previous getRequestMapping above
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getAllProducts() {
-        System.out.println("Starting the Get all Products API here");
-        List<Product> productList = null;
+    public ResponseEntity<Page<Product>> getAllProducts(
+            @RequestParam("pageNumber") int pageNumber,
+            @RequestParam("pageSize") int pageSize,
+            @RequestParam("fieldName") String fieldName
+    ) {
+        Page<Product> productList = null;
         try {
-            productList = productService.getAllProducts();
+            productList = productService.getAllProducts(pageNumber, pageSize, fieldName);
         } catch (ProductNotFoundException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Ending the Get All products API");
 
-        //Local variable 'productResponseEntity' is redundant
-        //Added response entity for all products as well
         return new ResponseEntity<>(
                 productList,
                 HttpStatus.OK

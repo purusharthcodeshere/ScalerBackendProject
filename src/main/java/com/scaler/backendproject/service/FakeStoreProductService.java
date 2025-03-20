@@ -5,13 +5,12 @@ import com.scaler.backendproject.exceptions.ProductNotFoundException;
 import com.scaler.backendproject.models.Category;
 import com.scaler.backendproject.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 //This annotation here is going to tell SpringBoot
 //that this is one of our important class
@@ -42,20 +41,32 @@ public class FakeStoreProductService implements ProductService {
         return fakeStoreProductDTO.getProduct();
     }
 
+
 //    @Override
 //    public Product[] getAllProducts(FakeStoreProductDTO[] listOfProducts) {
 //        return new Product[0];
 //    }
 
-    public List<Product> getAllProducts() throws ProductNotFoundException {
-        System.out.println("In the getAllProducts API in FKSPS");
+//    public List<Product> getAllProducts() throws ProductNotFoundException {
+//        System.out.println("In the getAllProducts API in FKSPS");
+//        FakeStoreProductDTO[] fakeStoreListOfProducts =
+//                restTemplate.getForObject("https://fakestoreapi.com/products/",
+//                        FakeStoreProductDTO[].class);
+//        if (fakeStoreListOfProducts == null) {
+//            throw new ProductNotFoundException("No Products Found in the Database");
+//        }
+//        return new FakeStoreProductDTO().getListOfProducts(fakeStoreListOfProducts);
+//    }
+
+    @Override
+    public Page<Product> getAllProducts(int pageNumber, int pageSize, String fieldName) throws ProductNotFoundException {
         FakeStoreProductDTO[] fakeStoreListOfProducts =
                 restTemplate.getForObject("https://fakestoreapi.com/products/",
                         FakeStoreProductDTO[].class);
         if (fakeStoreListOfProducts == null) {
             throw new ProductNotFoundException("No Products Found in the Database");
         }
-        return new FakeStoreProductDTO().getListOfProducts(fakeStoreListOfProducts);
+        return (Page<Product>) new FakeStoreProductDTO().getListOfProducts(fakeStoreListOfProducts);
     }
 
     @Override
