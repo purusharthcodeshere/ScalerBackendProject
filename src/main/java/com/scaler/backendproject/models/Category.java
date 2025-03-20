@@ -1,12 +1,17 @@
 package com.scaler.backendproject.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,6 +20,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Category extends BaseModel {
+    @Setter
+    @Getter
     private String title;
 
     //We declare the cardinality between the Product and the Category Class
@@ -23,18 +30,12 @@ public class Category extends BaseModel {
     //Since in the Product class, this cardinality is mapped by the category attribute,
     //we mention that here to indicate Hibernate not to create another mapping
     //We also mention the fetch type b/w Eager and Lazy
-//    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-//    private List<Product> products;
 
-    public String getTitle() {
-        return title;
-    }
+    @JsonIgnore
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    private List<Product> products;
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-//    public List<Product> getProducts() {
+    //    public List<Product> getProducts() {
 //        return products;
 //    }
 //
