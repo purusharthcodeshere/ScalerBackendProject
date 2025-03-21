@@ -1,4 +1,4 @@
-# Scaler Backend Project - E-Commerce API
+# DesiBazaar: E-Commerce Website
 
 This is a **Java Spring Boot** backend project for an **E-Commerce platform**, designed for high performance and scalability. The project integrates multiple **cloud services**, follows **best coding practices**, and ensures **efficient API performance**.
 
