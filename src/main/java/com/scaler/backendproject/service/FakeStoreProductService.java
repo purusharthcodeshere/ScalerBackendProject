@@ -4,8 +4,8 @@ import com.scaler.backendproject.dto.FakeStoreProductDTO;
 import com.scaler.backendproject.exceptions.ProductNotFoundException;
 import com.scaler.backendproject.models.Category;
 import com.scaler.backendproject.models.Product;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +20,34 @@ public class FakeStoreProductService implements ProductService {
 
     //Inside this, fake store is going to be third party service
 
-    @Autowired
-    private RestTemplate restTemplate;
+//    @Autowired
+    private final RestTemplate restTemplate;
+//    @Autowired
+    private final RedisTemplate<String, Object> redisTemplate;
 
-    public FakeStoreProductService(RestTemplate restTemplate) {
+    public FakeStoreProductService(RestTemplate restTemplate, RedisTemplate<String, Object> redisTemplate) {
         this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
     }
 
+    @Override
     public Product getSingleProduct(Long id) throws ProductNotFoundException {
         System.out.println("We are inside the single product in FakeStoreProductService");
+
+        //First part assume it as table name
+        //Second part: key of the product
+        Product redisProduct = (Product) redisTemplate
+                .opsForHash()
+                .get("PRODUCTS", "PRODUCTS_" + id);
+
+        if (redisProduct != null) {
+            //Cache Hit
+            return redisProduct;
+        }
+
+        //If the earlier 'if' condition is not true
+        //Then we have cache miss, and then we shall hit the api for FakeStore
+
         FakeStoreProductDTO fakeStoreProductDTO =
                 restTemplate.getForObject("https://fakestoreapi.com/products/" + id,
                 FakeStoreProductDTO.class);
@@ -37,6 +56,9 @@ public class FakeStoreProductService implements ProductService {
         if (fakeStoreProductDTO == null) {
             throw new ProductNotFoundException("Product Not Found with id: " + id);
         }
+
+        //Because we had cache miss, now we shall do cache eviction
+        redisTemplate.opsForHash().put("PRODUCTS", "PRODUCTS_" + id, fakeStoreProductDTO.getProduct());
 
         return fakeStoreProductDTO.getProduct();
     }

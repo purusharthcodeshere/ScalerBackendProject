@@ -27,6 +27,12 @@ public class ProductController {
     //Constructor to pass service to pass in controller so we can implement it
     //Added Qualifier Annotation to differentiate between which class we want to choose
     //FakeStoreProductService or selfProductService
+
+    //Implemented Redis for FakeStoreProductService
+    //So had changed the Qualifier here
+    //To check redis functionality,
+    //Change the Qualifier to "fakeStoreProductService"
+    //Also, have to implement, REDIS for selfProductService
     public ProductController(@Qualifier("selfProductService") ProductService productService) {
         this.productService = productService;
     }
