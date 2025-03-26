@@ -1,12 +1,14 @@
 package com.scaler.backendproject.dto;
 
 import com.scaler.backendproject.models.Category;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//@Getter
-//@Setter
+@Getter
+@Setter
 public class FakeStoreCategoryDTO {
     private Long id;
     private String title;
